@@ -1,0 +1,4 @@
+type Test {
+  attr1: String
+  attr2: Boolean
+}

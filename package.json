@@ -1,0 +1,48 @@
+{
+  "name": "durp",
+  "version": "0.0.1",
+  "description": "durp is a recursive directory parser for identifying modules or components based on a *.json config file",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive --exit",
+    "watch": "mocha --recursive -w",
+    "develop": "npm run watch",
+    "check": "nyc --reporter=text --reporter=lcov --reporter=html --check-coverage npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/entegral/durp.git"
+  },
+  "author": "Robert Bruce",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/entegral/durp/issues"
+  },
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "minimist": "^1.2.5",
+    "mocha": "^7.1.2",
+    "nyc": "^15.0.1",
+    "pre-commit": "^1.2.2",
+    "rewire": "^5.0.0",
+    "serverless-localstack": "^0.4.24",
+    "sinon": "^9.0.2",
+    "standard": "^14.3.4",
+    "yaml": "^1.9.2"
+  },
+  "pre-commit": [
+    "check"
+  ],
+  "standard": {
+    "env": [
+      "mocha"
+    ]
+  },
+  "nyc": {
+    "statements": 100,
+    "branches": 100,
+    "functions": 100,
+    "lines": 100
+  },
+  "homepage": "https://github.com/entegral/durp#readme"
+}
