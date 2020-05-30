@@ -1,6 +1,6 @@
 {
   "name": "durp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "durp is a recursive directory parser for identifying modules or components based on a *.json config file",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "url": "git+ssh://git@github.com/entegral/durp.git"
   },
   "author": "Robert Bruce",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/entegral/durp/issues"
   },
