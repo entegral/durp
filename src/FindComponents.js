@@ -4,7 +4,6 @@ const fs = require('fs')
 const componentIdentifier = process.env.DURP_NAME || 'bean.json'
 
 const isComponent = (path) => {
-  console.log('componentId', componentIdentifier)
   assert.isString(path, `[isComponent] argument must be a filepath of type string, found type: ${typeof path}`)
   const file = path.endsWith('/') ? componentIdentifier : `/${componentIdentifier}`
   try {
