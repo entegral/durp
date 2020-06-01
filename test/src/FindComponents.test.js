@@ -1,7 +1,7 @@
-process.env.DURP_NAME = 'bean.json'
 const assert = require('../../helpers/TestHelpers')
 const rewire = require('rewire')
 const sinon = require('sinon')
+const fcRewired = rewire('../../src/FindComponents')
 const { findComponents, isComponent, validateComponent, sortFileTypes } = require('../../src/FindComponents')
 
 describe('FindComponents', () => {
@@ -33,7 +33,7 @@ describe('FindComponents', () => {
         'BigBean.graphql'
       ],
       json: [
-        process.env.DURP_NAME,
+        'bean.json',
         'config.json'
       ],
       path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent/'
@@ -64,7 +64,7 @@ describe('FindComponents', () => {
           'BigBean.graphql'
         ],
         json: [
-          process.env.DURP_NAME,
+          'bean.json',
           'config.json'
         ],
         path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent'
@@ -86,7 +86,7 @@ describe('FindComponents', () => {
           'BigBean.graphql'
         ],
         json: [
-          process.env.DURP_NAME,
+          'bean.json',
           'config.json'
         ],
         path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent'
@@ -102,7 +102,7 @@ describe('FindComponents', () => {
           'BigBean.graphql'
         ],
         json: [
-          process.env.DURP_NAME,
+          'bean.json',
           'config.json'
         ],
         path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent2'
@@ -124,7 +124,7 @@ describe('FindComponents', () => {
           'BigBean.graphql'
         ],
         json: [
-          process.env.DURP_NAME,
+          'bean.json',
           'config.json'
         ],
         path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent'
@@ -140,7 +140,7 @@ describe('FindComponents', () => {
           'BigBean.graphql'
         ],
         json: [
-          process.env.DURP_NAME,
+          'bean.json',
           'config.json'
         ],
         path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent2'
@@ -156,7 +156,7 @@ describe('FindComponents', () => {
           'BigBean.graphql'
         ],
         json: [
-          process.env.DURP_NAME,
+          'bean.json',
           'config.json'
         ],
         path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/another_random_subdir/aComponent4'
@@ -172,7 +172,7 @@ describe('FindComponents', () => {
           'BigBean.graphql'
         ],
         json: [
-          process.env.DURP_NAME,
+          'bean.json',
           'config.json'
         ],
         path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/random_subdir/aComponent3'
@@ -202,6 +202,12 @@ describe('FindComponents', () => {
       const res = isComponent(__dirname + '/../examples/componentStructure/testComponentDir1/notAComponent/')
       assert.strictEqual(res, false)
     })
+    it('should be able to override the default component identifying file', () => {
+      fcRewired.__set__('componentIdentifier', 'corn.json')
+      const res = fcRewired.isComponent(__dirname + '/../examples/componentStructure/testComponentDir1/notAComponent/')
+      assert.strictEqual(res, __dirname + '/../examples/componentStructure/testComponentDir1/notAComponent/')
+      fcRewired.__set__('componentIdentifier', 'bean.json')
+    })
   })
 
   describe('sortFileTypes', () => {
@@ -221,10 +227,10 @@ describe('FindComponents', () => {
       it('json files', () => {
         const compPath = __dirname + '/../examples/componentStructure/testComponentDir1/aComponent'
         let res = sortFileTypes(compPath)
-        assert.deepEqual(res.json, [process.env.DURP_NAME])
+        assert.deepEqual(res.json, ['bean.json'])
         const compPath2 = __dirname + '/../examples/componentStructure/testComponentDir2/aComponent/'
         res = sortFileTypes(compPath2)
-        assert.deepEqual(res.json.sort(), [process.env.DURP_NAME, 'config.json'])
+        assert.deepEqual(res.json.sort(), ['bean.json', 'config.json'])
       })
       it('directories', () => {
         const dir1 = __dirname + '/../examples/componentStructure/testComponentDir1/'

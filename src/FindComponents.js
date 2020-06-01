@@ -1,9 +1,12 @@
 const assert = require('../helpers/TestHelpers')
 const fs = require('fs')
 
+const componentIdentifier = process.env.DURP_NAME || 'bean.json'
+
 const isComponent = (path) => {
+  console.log('componentId', componentIdentifier)
   assert.isString(path, `[isComponent] argument must be a filepath of type string, found type: ${typeof path}`)
-  const file = path.endsWith('/') ? process.env.DURP_NAME : `/${process.env.DURP_NAME}`
+  const file = path.endsWith('/') ? componentIdentifier : `/${componentIdentifier}`
   try {
     require(path + file)
     return path
@@ -28,7 +31,7 @@ const sortFileTypes = (path) => {
 
 const validateComponent = (path) => {
   assert.isString(path, `[validateComponent] argument must be a filepath of type string, found type: ${typeof path}`)
-  if (!isComponent(path)) { throw new Error(`expected path to contain a ${process.env.DURP_NAME} file:\n${path}\n`) }
+  if (!isComponent(path)) { throw new Error(`expected path to contain a ${componentIdentifier} file:\n${path}\n`) }
   const files = sortFileTypes(path)
   if ((!files.gql && !files.graphql) || (files.gql.length + files.graphql.length === 0)) {
     throw new Error(`no gql or graphql models found in path: ${path}`)
