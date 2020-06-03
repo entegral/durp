@@ -1,3 +1,3 @@
-const {findComponents} = require('./src/FindComponents')
+const FindComponents = require('./src/FindComponents')
 
-module.exports.findComponents = findComponents
+module.exports = FindComponents

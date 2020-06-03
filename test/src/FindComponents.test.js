@@ -5,179 +5,199 @@ const fcRewired = rewire('../../src/FindComponents')
 const { findComponents, isComponent, validateComponent, sortFileTypes } = require('../../src/FindComponents')
 
 describe('FindComponents', () => {
+  const validateTestComponent = (files) => {
+    if ((!files.gql && !files.graphql) || (files.gql.length + files.graphql.length === 0)) {
+      throw new Error(`no gql or graphql models found in path: ${files.path}`)
+    }
+  }
+  const findValidComponents = findComponents.bind(null, validateTestComponent)
+
   it('should be a function', () => {
     assert.isFunction(findComponents, 'expected FindComponents to export a function')
   })
 
-  it('should accept a filepath that it validates as a string', () => {
-    for (const badType of assert.onlyString) {
+  it('should throw an error if it is not provided a function to validate a component', () => {
+    const nonFunctions = [1, 'string', true, false, undefined, [], {}]
+    for (const badType of nonFunctions) {
       assert.errorSays(
         findComponents,
         badType,
-        `[findComponents] argument must be a filepath of type string, found type: ${typeof badType}`
+        `[findComponents] argument must be a function used to validate a component structure, found type: ${typeof badType}`
       )
     }
   })
 
-  it('should only return a sortedFileTypes object if a path has a bean.json', () => {
-    const compPath = __dirname + '/../examples/componentStructure/testComponentDir2/aComponent/'
-    const res = findComponents(compPath)
-    assert.deepEqual(res, [{
-      dirs: [
-        'storage'
-      ],
-      gql: [
-        'LilBean.gql'
-      ],
-      graphql: [
-        'BigBean.graphql'
-      ],
-      json: [
-        'bean.json',
-        'config.json'
-      ],
-      path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent/'
-    }])
-    // const notCompPath = __dirname + '/../examples/componentStructure/testComponentDir1/notAComponent/'
-    // res = findComponents(notCompPath)
-    // assert.deepEqual(res, {})
-  })
-
-  it('should not return an organized object of the path\'s contents if it is not a component', () => {
-    const notCompPath = __dirname + '/../examples/componentStructure/testComponentDir1/notAComponent/'
-    const res = findComponents(notCompPath)
-    assert.deepEqual(res, [])
-  })
-
-  it('should recursively call itself and return all sorted component objects in a single array', () => {
-    const projPath = __dirname + '/../examples/componentStructure/testComponentDir2/'
-    const res = findComponents(projPath)
-    assert.deepEqual(res, [
-      {
-        dirs: [
-          'storage'
-        ],
-        gql: [
-          'LilBean.gql'
-        ],
-        graphql: [
-          'BigBean.graphql'
-        ],
-        json: [
-          'bean.json',
-          'config.json'
-        ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent'
-      }])
-  })
-
-  it('should recursively call itself and return sorted component objects in a single array', () => {
-    const projPath = __dirname + '/../examples/componentStructure/testComponentDir3/'
-    const res = findComponents(projPath)
-    assert.deepEqual(res, [
-      {
-        dirs: [
-          'storage'
-        ],
-        gql: [
-          'LilBean.gql'
-        ],
-        graphql: [
-          'BigBean.graphql'
-        ],
-        json: [
-          'bean.json',
-          'config.json'
-        ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent'
-      },
-      {
-        dirs: [
-          'storage'
-        ],
-        gql: [
-          'LilBean.gql'
-        ],
-        graphql: [
-          'BigBean.graphql'
-        ],
-        json: [
-          'bean.json',
-          'config.json'
-        ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent2'
-      }])
-  })
-
-  it('should recursively call itself and return all 4 sorted component objects in a single array', () => {
-    const projPath = __dirname + '/../examples/componentStructure/testComponentDir4/'
-    const res = findComponents(projPath)
-    assert.deepEqual(res, [
-      {
-        dirs: [
-          'storage'
-        ],
-        gql: [
-          'LilBean.gql'
-        ],
-        graphql: [
-          'BigBean.graphql'
-        ],
-        json: [
-          'bean.json',
-          'config.json'
-        ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent'
-      },
-      {
-        dirs: [
-          'storage'
-        ],
-        gql: [
-          'LilBean.gql'
-        ],
-        graphql: [
-          'BigBean.graphql'
-        ],
-        json: [
-          'bean.json',
-          'config.json'
-        ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent2'
-      },
-      {
-        dirs: [
-          'storage'
-        ],
-        gql: [
-          'LilBean.gql'
-        ],
-        graphql: [
-          'BigBean.graphql'
-        ],
-        json: [
-          'bean.json',
-          'config.json'
-        ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/another_random_subdir/aComponent4'
-      },
-      {
-        dirs: [
-          'storage'
-        ],
-        gql: [
-          'LilBean.gql'
-        ],
-        graphql: [
-          'BigBean.graphql'
-        ],
-        json: [
-          'bean.json',
-          'config.json'
-        ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/random_subdir/aComponent3'
+  describe('output', () => {
+    it('should be a function', () => {
+      assert.isFunction(findValidComponents)
+    })
+    it('should accept a filepath that it validates as a string', () => {
+      for (const badType of assert.onlyString) {
+        assert.errorSays(
+          findValidComponents,
+          badType,
+          `[findComponents] argument must be a filepath of type string, found type: ${typeof badType}`
+        )
       }
-    ])
+    })
+
+    it('should only return a sortedFileTypes object if a path has a bean.json', () => {
+      const compPath = __dirname + '/../examples/componentStructure/testComponentDir2/aComponent/'
+      const res = findValidComponents(compPath)
+      assert.deepEqual(res, [{
+        dirs: [
+          'storage'
+        ],
+        gql: [
+          'LilBean.gql'
+        ],
+        graphql: [
+          'BigBean.graphql'
+        ],
+        json: [
+          'bean.json',
+          'config.json'
+        ],
+        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent/'
+      }])
+    })
+
+    it('should not return an organized object of the path\'s contents if it is not a component', () => {
+      const notCompPath = __dirname + '/../examples/componentStructure/testComponentDir1/notAComponent/'
+      const res = findValidComponents(notCompPath)
+      assert.deepEqual(res, [])
+    })
+
+    it('should recursively call itself and return all sorted component objects in a single array', () => {
+      const projPath = __dirname + '/../examples/componentStructure/testComponentDir2/'
+      const res = findValidComponents(projPath)
+      assert.deepEqual(res, [
+        {
+          dirs: [
+            'storage'
+          ],
+          gql: [
+            'LilBean.gql'
+          ],
+          graphql: [
+            'BigBean.graphql'
+          ],
+          json: [
+            'bean.json',
+            'config.json'
+          ],
+          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent'
+        }])
+    })
+
+    it('should recursively call itself and return sorted component objects in a single array', () => {
+      const projPath = __dirname + '/../examples/componentStructure/testComponentDir3/'
+      const res = findValidComponents(projPath)
+      assert.deepEqual(res, [
+        {
+          dirs: [
+            'storage'
+          ],
+          gql: [
+            'LilBean.gql'
+          ],
+          graphql: [
+            'BigBean.graphql'
+          ],
+          json: [
+            'bean.json',
+            'config.json'
+          ],
+          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent'
+        },
+        {
+          dirs: [
+            'storage'
+          ],
+          gql: [
+            'LilBean.gql'
+          ],
+          graphql: [
+            'BigBean.graphql'
+          ],
+          json: [
+            'bean.json',
+            'config.json'
+          ],
+          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent2'
+        }])
+    })
+
+    it('should recursively call itself and return all 4 sorted component objects in a single array', () => {
+      const projPath = __dirname + '/../examples/componentStructure/testComponentDir4/'
+      const res = findValidComponents(projPath)
+      assert.deepEqual(res, [
+        {
+          dirs: [
+            'storage'
+          ],
+          gql: [
+            'LilBean.gql'
+          ],
+          graphql: [
+            'BigBean.graphql'
+          ],
+          json: [
+            'bean.json',
+            'config.json'
+          ],
+          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent'
+        },
+        {
+          dirs: [
+            'storage'
+          ],
+          gql: [
+            'LilBean.gql'
+          ],
+          graphql: [
+            'BigBean.graphql'
+          ],
+          json: [
+            'bean.json',
+            'config.json'
+          ],
+          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent2'
+        },
+        {
+          dirs: [
+            'storage'
+          ],
+          gql: [
+            'LilBean.gql'
+          ],
+          graphql: [
+            'BigBean.graphql'
+          ],
+          json: [
+            'bean.json',
+            'config.json'
+          ],
+          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/another_random_subdir/aComponent4'
+        },
+        {
+          dirs: [
+            'storage'
+          ],
+          gql: [
+            'LilBean.gql'
+          ],
+          graphql: [
+            'BigBean.graphql'
+          ],
+          json: [
+            'bean.json',
+            'config.json'
+          ],
+          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/random_subdir/aComponent3'
+        }
+      ])
+    })
   })
 
   describe('isComponent', () => {
@@ -274,9 +294,15 @@ describe('FindComponents', () => {
         )
       })
       it('has no .gql or .graphql files', () => {
+        const validateFn = () => {
+          const files = sortFileTypes(path)
+          if ((!files.gql && !files.graphql) || (files.gql.length + files.graphql.length === 0)) {
+            throw new Error(`no gql or graphql models found in path: ${path}`)
+          }
+        }
         const path = __dirname + '/../examples/componentStructure/testComponentDir1/aComponent/'
         assert.errorSays(
-          validateComponent,
+          validateComponent.bind(null, path, validateFn),
           path,
           `no gql or graphql models found in path: ${path}`
         )

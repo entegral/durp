@@ -28,28 +28,28 @@ const sortFileTypes = (path) => {
   return filesToValidate
 }
 
-const validateComponent = (path) => {
+const validateComponent = (path, fn) => {
   assert.isString(path, `[validateComponent] argument must be a filepath of type string, found type: ${typeof path}`)
   if (!isComponent(path)) { throw new Error(`expected path to contain a ${componentIdentifier} file:\n${path}\n`) }
   const files = sortFileTypes(path)
-  if ((!files.gql && !files.graphql) || (files.gql.length + files.graphql.length === 0)) {
-    throw new Error(`no gql or graphql models found in path: ${path}`)
-  }
+  if (fn) { fn(files) }
 }
 
-const findComponents = (path) => {
+const findComponents = (fn, path) => {
+  console.log({ fn, path })
+  assert.isFunction(fn, `[findComponents] argument must be a function used to validate a component structure, found type: ${typeof fn}`)
   assert.isString(path, `[findComponents] argument must be a filepath of type string, found type: ${typeof path}`)
   let components = []
   const root = isComponent(path)
   if (root) {
-    validateComponent(root)
+    validateComponent(root, fn)
     components.push(sortFileTypes(root))
   }
   const contents = sortFileTypes(path)
   if (contents.dirs && contents.dirs.length > 0) {
     for (const folder of contents.dirs) {
       const childPath = contents.path.endsWith('/') ? `${contents.path}${folder}` : `${contents.path}/${folder}`
-      const childComponents = findComponents(childPath)
+      const childComponents = findComponents.call(null, fn, childPath)
       components = [...components, ...childComponents]
     }
   }

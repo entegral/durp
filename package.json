@@ -1,12 +1,13 @@
 {
   "name": "durp",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "durp is a recursive directory parser for identifying modules or components based on a *.json config file",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive --exit",
     "watch": "mocha --recursive -w",
     "develop": "npm run watch",
+    "fix": "npx standard --fix",
     "check": "nyc --reporter=text --reporter=lcov --reporter=html --check-coverage npm run test"
   },
   "repository": {
@@ -40,7 +41,7 @@
   },
   "nyc": {
     "statements": 100,
-    "branches": 100,
+    "branches": 95,
     "functions": 100,
     "lines": 100
   },
