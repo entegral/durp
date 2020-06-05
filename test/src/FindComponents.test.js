@@ -58,7 +58,7 @@ describe('FindComponents', () => {
           'bean.json',
           'config.json'
         ],
-        path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent/'
+        path: `${__dirname}/../examples/componentStructure/testComponentDir2/aComponent/`
       }])
     })
 
@@ -86,7 +86,7 @@ describe('FindComponents', () => {
             'bean.json',
             'config.json'
           ],
-          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir2/aComponent'
+          path: projPath + 'aComponent'
         }])
     })
 
@@ -108,7 +108,7 @@ describe('FindComponents', () => {
             'bean.json',
             'config.json'
           ],
-          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent'
+          path: `${__dirname}/../examples/componentStructure/testComponentDir3/aComponent`
         },
         {
           dirs: [
@@ -124,7 +124,7 @@ describe('FindComponents', () => {
             'bean.json',
             'config.json'
           ],
-          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir3/aComponent2'
+          path: `${__dirname}/../examples/componentStructure/testComponentDir3/aComponent2`
         }])
     })
 
@@ -146,7 +146,7 @@ describe('FindComponents', () => {
             'bean.json',
             'config.json'
           ],
-          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent'
+          path: `${__dirname}/../examples/componentStructure/testComponentDir4/aComponent`
         },
         {
           dirs: [
@@ -162,7 +162,7 @@ describe('FindComponents', () => {
             'bean.json',
             'config.json'
           ],
-          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/aComponent2'
+          path: `${__dirname}/../examples/componentStructure/testComponentDir4/aComponent2`
         },
         {
           dirs: [
@@ -178,7 +178,7 @@ describe('FindComponents', () => {
             'bean.json',
             'config.json'
           ],
-          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/another_random_subdir/aComponent4'
+          path: `${__dirname}/../examples/componentStructure/testComponentDir4/another_random_subdir/aComponent4`
         },
         {
           dirs: [
@@ -194,7 +194,7 @@ describe('FindComponents', () => {
             'bean.json',
             'config.json'
           ],
-          path: '/home/brucer/Repos/durp/test/src/../examples/componentStructure/testComponentDir4/random_subdir/aComponent3'
+          path: `${__dirname}/../examples/componentStructure/testComponentDir4/random_subdir/aComponent3`
         }
       ])
     })
