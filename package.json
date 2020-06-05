@@ -1,6 +1,6 @@
 {
   "name": "durp",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "durp is a recursive directory parser for identifying modules or components based on a *.json config file",
   "main": "index.js",
   "scripts": {
