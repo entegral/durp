@@ -22,7 +22,7 @@
   "devDependencies": {
     "eslint": "^7.0.0",
     "minimist": "^1.2.5",
-    "mocha": "^7.1.2",
+    "mocha": "^10.2.0",
     "nyc": "^15.0.1",
     "pre-commit": "^1.2.2",
     "rewire": "^5.0.0",
